@@ -533,6 +533,70 @@
         @media (max-width: 768px) {
             .platform-card { max-width: 340px; }
         }
+
+        /* ── Bird Mini Game ── */
+        .game-section {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            max-width: 680px;
+            width: 90%;
+            margin: 0 auto 80px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.6s forwards;
+        }
+        .game-sect-line {
+            width: 55%;
+            height: 1px;
+            background: linear-gradient(to right, transparent, rgba(192,57,43,0.65), transparent);
+            margin: 18px auto 20px;
+        }
+        .game-sect-label {
+            font-family: 'CMU', serif;
+            font-style: italic;
+            font-size: 0.78rem;
+            letter-spacing: 5px;
+            color: rgba(255,255,255,0.35);
+            text-transform: uppercase;
+            margin-bottom: 16px;
+        }
+        .game-wrap {
+            position: relative;
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 6px;
+            overflow: hidden;
+            background: rgba(0,0,0,0.25);
+        }
+        .game-hud {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 16px 4px;
+            font-family: 'CMU', serif;
+            font-size: 0.78rem;
+            letter-spacing: 3px;
+            color: rgba(255,255,255,0.4);
+            user-select: none;
+        }
+        #birdGame {
+            display: block;
+            width: 100%;
+            cursor: pointer;
+            touch-action: none;
+        }
+        .game-hint {
+            position: absolute;
+            bottom: 10px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-family: 'CMU', serif;
+            font-style: italic;
+            font-size: 0.72rem;
+            letter-spacing: 2px;
+            color: rgba(255,255,255,0.38);
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
     </style>
 </head>
 <body>
@@ -592,6 +656,20 @@
             <div class="plat-bar-track"><div class="plat-bar-fill" id="bar-mixi2"></div></div>
         </div>
         <p class="plat-total-note" id="plat-total-note"></p>
+    </div>
+</div>
+
+<!-- Bird Mini Game -->
+<div class="game-section">
+    <div class="game-sect-line"></div>
+    <div class="game-sect-label">— mini game —</div>
+    <div class="game-wrap">
+        <div class="game-hud">
+            <span>SCORE &nbsp;<span id="g-score">0</span></span>
+            <span>BEST &nbsp;<span id="g-best">0</span></span>
+        </div>
+        <canvas id="birdGame" height="160"></canvas>
+        <div class="game-hint" id="g-hint">กด Space / Click = กระโดด &nbsp;·&nbsp; ↓ / S = ก้ม</div>
     </div>
 </div>
 
@@ -879,6 +957,301 @@
             }
         };
     });
+</script>
+
+<script>
+(function () {
+    const canvas  = document.getElementById('birdGame');
+    const ctx     = canvas.getContext('2d');
+    const scoreEl = document.getElementById('g-score');
+    const bestEl  = document.getElementById('g-best');
+    const hintEl  = document.getElementById('g-hint');
+
+    let W = 0, H = 160, groundY = 0;
+    function resize() {
+        W = canvas.width = canvas.parentElement.clientWidth;
+        H = canvas.height = 160;
+        groundY = H - 36;
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    const birdImg = new Image();
+    birdImg.src = 'image/bird.png';
+
+    const BX = 75, BW = 50;
+    const BH_NORMAL = 40, BH_DUCK = 18;
+    const GRAVITY = 0.58, JUMP_V = -11.5;
+    let by, bvy, bGround, bDuck;
+    function resetBird() { by = groundY - BH_NORMAL; bvy = 0; bGround = true; bDuck = false; }
+    resetBird();
+    function curBH() { return bDuck ? BH_DUCK : BH_NORMAL; }
+
+    let state = 'idle';
+    let score = 0;
+    let best  = parseInt(localStorage.getItem('kmn_bird_best') || '0');
+    let speed = 3.0;
+    let frame = 0;
+    let nextAt = 120;
+    let obs = [];
+    bestEl.textContent = best;
+
+    function spawn() {
+        const r = Math.random();
+        if (r < 0.48) {
+            // Rock — กระโดดหลบ
+            const h = 30 + Math.floor(Math.random() * 38);
+            obs.push({ t: 'r', x: W + 10, y: groundY - h, w: 26, h });
+        } else if (r < 0.78) {
+            // Log — กระโดดหลบ
+            obs.push({ t: 'l', x: W + 10, y: groundY - 22, w: 58, h: 22 });
+        } else {
+            // Hanging branch — ก้มหลบ (เปิดเมื่อ speed > 5.8)
+            if (speed < 6.5) {
+                const h = 28 + Math.floor(Math.random() * 32);
+                obs.push({ t: 'r', x: W + 10, y: groundY - h, w: 26, h });
+                return;
+            }
+            // gap จากพื้น = 25px  →  duckBird (18px) ผ่านได้, normalBird (40px) ผ่านไม่ได้
+            const gapH = 25;
+            obs.push({ t: 'h', x: W + 10, y: 0, w: 50, h: groundY - gapH });
+        }
+    }
+
+    function jump() {
+        if (state === 'dead') { restart(); return; }
+        if (state === 'idle') { state = 'running'; hintEl.style.opacity = '0'; }
+        if (bGround) { bvy = JUMP_V; bGround = false; bDuck = false; }
+    }
+
+    function duck(on) {
+        if (state === 'dead' || state === 'idle') return;
+        bDuck = on;
+        if (bGround) by = groundY - (on ? BH_DUCK : BH_NORMAL);
+    }
+
+    function restart() {
+        score = 0; speed = 3.0; frame = 0; nextAt = 120; obs = [];
+        resetBird();
+        scoreEl.textContent = '0';
+        hintEl.style.opacity = '0';
+        state = 'running';
+    }
+
+    function hit(o) {
+        const bh = curBH();
+        const adjBy = bGround ? groundY - bh : by;
+        const m = 6;
+        return BX + m < o.x + o.w - m &&
+               BX + BW - m > o.x + m &&
+               adjBy + m < o.y + o.h &&
+               adjBy + bh - m > o.y;
+    }
+
+    function drawGround() {
+        ctx.strokeStyle = 'rgba(255,255,255,0.1)';
+        ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(0, groundY); ctx.lineTo(W, groundY); ctx.stroke();
+    }
+
+    function drawRock(o) {
+        ctx.save();
+        const g = ctx.createLinearGradient(o.x, o.y, o.x + o.w, o.y + o.h);
+        g.addColorStop(0, '#b09a82'); g.addColorStop(1, '#7a6552');
+        ctx.fillStyle = g;
+        ctx.beginPath();
+        ctx.moveTo(o.x + o.w * 0.15, o.y + o.h);
+        ctx.lineTo(o.x + 2,           o.y + o.h * 0.68);
+        ctx.lineTo(o.x + o.w * 0.1,   o.y + o.h * 0.3);
+        ctx.lineTo(o.x + o.w * 0.38,  o.y);
+        ctx.lineTo(o.x + o.w * 0.67,  o.y + o.h * 0.1);
+        ctx.lineTo(o.x + o.w - 2,     o.y + o.h * 0.48);
+        ctx.lineTo(o.x + o.w * 0.83,  o.y + o.h);
+        ctx.closePath(); ctx.fill();
+        ctx.fillStyle = 'rgba(255,255,255,0.07)';
+        ctx.beginPath();
+        ctx.moveTo(o.x + o.w * 0.3,  o.y + o.h * 0.12);
+        ctx.lineTo(o.x + o.w * 0.62, o.y + o.h * 0.2);
+        ctx.lineTo(o.x + o.w * 0.45, o.y + o.h * 0.42);
+        ctx.closePath(); ctx.fill();
+        ctx.restore();
+    }
+
+    function drawLog(o) {
+        const r = o.h / 2;
+        ctx.save();
+        const g = ctx.createLinearGradient(o.x, o.y, o.x, o.y + o.h);
+        g.addColorStop(0, '#9a6340'); g.addColorStop(1, '#6b3f22');
+        ctx.fillStyle = g;
+        ctx.beginPath();
+        if (ctx.roundRect) ctx.roundRect(o.x, o.y, o.w, o.h, r);
+        else ctx.rect(o.x, o.y, o.w, o.h);
+        ctx.fill();
+        ctx.strokeStyle = 'rgba(0,0,0,0.18)';
+        ctx.lineWidth = 0.8;
+        for (let i = 1; i <= 2; i++) {
+            ctx.beginPath();
+            ctx.moveTo(o.x + 10, o.y + (o.h / 3) * i);
+            ctx.lineTo(o.x + o.w - 10, o.y + (o.h / 3) * i);
+            ctx.stroke();
+        }
+        ctx.fillStyle = '#5c3318';
+        ctx.beginPath(); ctx.ellipse(o.x + 4, o.y + r, 5, r - 1, 0, 0, Math.PI * 2); ctx.fill();
+        ctx.beginPath(); ctx.ellipse(o.x + o.w - 4, o.y + r, 5, r - 1, 0, 0, Math.PI * 2); ctx.fill();
+        ctx.restore();
+    }
+
+    function drawHang(o) {
+        ctx.save();
+        // trunk from ceiling
+        const g = ctx.createLinearGradient(o.x, 0, o.x, o.h);
+        g.addColorStop(0, '#4a2a10'); g.addColorStop(1, '#9a6340');
+        ctx.fillStyle = g;
+        ctx.beginPath();
+        if (ctx.roundRect) ctx.roundRect(o.x, 0, o.w, o.h, [0, 0, 10, 10]);
+        else ctx.rect(o.x, 0, o.w, o.h);
+        ctx.fill();
+        // wood grain
+        ctx.strokeStyle = 'rgba(0,0,0,0.14)';
+        ctx.lineWidth = 0.8;
+        for (let i = 1; i <= 3; i++) {
+            ctx.beginPath();
+            ctx.moveTo(o.x + 8, (o.h / 4) * i);
+            ctx.lineTo(o.x + o.w - 8, (o.h / 4) * i);
+            ctx.stroke();
+        }
+        // bottom rounded cap
+        ctx.fillStyle = '#7a4f28';
+        ctx.beginPath();
+        ctx.ellipse(o.x + o.w / 2, o.h, o.w / 2 - 2, 8, 0, 0, Math.PI * 2);
+        ctx.fill();
+        // danger drips
+        ctx.fillStyle = 'rgba(192,57,43,0.6)';
+        [0.22, 0.52, 0.78].forEach(px => {
+            ctx.beginPath();
+            ctx.ellipse(o.x + o.w * px, o.h + 5, 2.5, 5, 0, 0, Math.PI * 2);
+            ctx.fill();
+        });
+        ctx.restore();
+    }
+
+    function drawBird() {
+        const bh = curBH();
+        const adjBy = bGround ? groundY - bh : by;
+        const scaleY = bDuck ? BH_DUCK / BH_NORMAL : 1;
+        ctx.save();
+        ctx.translate(BX + BW / 2, adjBy + bh / 2);
+        if (state === 'running') {
+            ctx.rotate(bDuck ? 0.2 : Math.max(-0.35, Math.min(0.45, bvy * 0.034)));
+        } else if (state === 'dead') {
+            ctx.rotate(0.5);
+        }
+        ctx.scale(1, scaleY);
+        if (birdImg.complete && birdImg.naturalWidth) {
+            ctx.drawImage(birdImg, -BW / 2, -BH_NORMAL / 2, BW, BH_NORMAL);
+        } else {
+            ctx.fillStyle = '#ffc107';
+            ctx.beginPath();
+            ctx.ellipse(0, 0, BW / 2, BH_NORMAL / 2, 0, 0, Math.PI * 2);
+            ctx.fill();
+        }
+        ctx.restore();
+    }
+
+    function loop() {
+        ctx.clearRect(0, 0, W, H);
+
+        if (state === 'running') {
+            frame++;
+            // ค่อย ๆ เร่ง ช้า ๆ
+            speed = Math.min(3 + Math.pow(frame * 0.0004, 1.3), 11);
+
+            if (frame % 5 === 0) {
+                score++;
+                scoreEl.textContent = score;
+                if (score > best) {
+                    best = score;
+                    bestEl.textContent = best;
+                    localStorage.setItem('kmn_bird_best', best);
+                }
+            }
+
+            // Physics
+            if (!(bDuck && bGround)) {
+                bvy += GRAVITY;
+                by  += bvy;
+            }
+            if (by >= groundY - BH_NORMAL) {
+                by = groundY - BH_NORMAL;
+                bvy = 0;
+                bGround = true;
+                if (bDuck) by = groundY - BH_DUCK;
+            }
+
+            if (frame >= nextAt) {
+                spawn();
+                const minGap = Math.max(48, Math.floor(100 - speed * 4));
+                nextAt = frame + minGap + Math.floor(Math.random() * 50);
+            }
+
+            let dead = false;
+            for (let i = obs.length - 1; i >= 0; i--) {
+                obs[i].x -= speed;
+                if (obs[i].x + obs[i].w < 0) { obs.splice(i, 1); continue; }
+                if (!dead && hit(obs[i])) {
+                    dead = true;
+                    state = 'dead';
+                    hintEl.textContent = 'GAME OVER  ·  Space / Click เพื่อเล่นใหม่';
+                    hintEl.style.opacity = '1';
+                }
+            }
+        }
+
+        if (state === 'idle') {
+            by = (groundY - BH_NORMAL) + Math.sin(Date.now() / 400) * 4;
+        }
+
+        drawGround();
+        obs.forEach(o => {
+            if (o.t === 'r') drawRock(o);
+            else if (o.t === 'l') drawLog(o);
+            else drawHang(o);
+        });
+        drawBird();
+
+        requestAnimationFrame(loop);
+    }
+
+    // Keyboard controls
+    document.addEventListener('keydown', e => {
+        if (e.code === 'Space' || e.code === 'ArrowUp' || e.code === 'KeyW') {
+            const r = canvas.getBoundingClientRect();
+            if (state !== 'idle' || (r.bottom > 0 && r.top < window.innerHeight)) e.preventDefault();
+            jump();
+        }
+        if (e.code === 'ArrowDown' || e.code === 'KeyS') {
+            e.preventDefault(); duck(true);
+        }
+    });
+    document.addEventListener('keyup', e => {
+        if (e.code === 'ArrowDown' || e.code === 'KeyS') duck(false);
+    });
+
+    // Touch: แตะครึ่งบน = กระโดด, แตะครึ่งล่าง = ก้ม
+    canvas.addEventListener('click', jump);
+    canvas.addEventListener('touchstart', e => {
+        e.preventDefault();
+        const t = e.touches[0];
+        const r = canvas.getBoundingClientRect();
+        if ((t.clientY - r.top) < r.height * 0.55) jump();
+        else duck(true);
+    }, { passive: false });
+    canvas.addEventListener('touchend', e => {
+        e.preventDefault(); duck(false);
+    }, { passive: false });
+
+    loop();
+}());
 </script>
 
 </body>
