@@ -839,30 +839,35 @@
             platBtns.forEach(b => b.disabled = true);
             btn.classList.add('selected');
 
+            let writeOk = false;
             try {
                 const voterRef = doc(db, "voters", user.uid);
                 const voterSnap = await getDoc(voterRef);
                 if (voterSnap.exists() && !voterSnap.data().platform) {
                     await updateDoc(voterRef, { platform: plat });
-                    // setDoc + merge:true รองรับทั้งกรณี doc มีอยู่แล้วและยังไม่มี
                     await setDoc(platRef, { [plat]: increment(1) }, { merge: true });
+                    writeOk = true;
+                } else if (voterSnap.exists() && voterSnap.data().platform) {
+                    // โหวตซ้ำ — แค่แสดงผล
+                    writeOk = true;
                 }
             } catch (e) {
-                console.error(e);
+                console.error("platformPoll write error:", e);
+                const errEl = document.getElementById('plat-total-note');
+                if (errEl) errEl.innerText = '⚠ เกิดข้อผิดพลาด: ' + e.code;
             }
 
-            // แสดง results div ก่อน (bars ยังอยู่ที่ 0%)
             platBtnsWrap.style.display = 'none';
             platResults.classList.add('show');
 
-            // รอ 1 frame ให้ browser paint ก่อน แล้วค่อย set width
-            // เพื่อให้ CSS transition ทำงานได้ถูกต้อง
-            try {
-                const freshSnap = await getDoc(platRef);
-                if (freshSnap.exists()) {
-                    requestAnimationFrame(() => applyPlatResults(freshSnap.data()));
-                }
-            } catch (e) { /* onSnapshot ยังดูแล real-time อยู่ */ }
+            if (writeOk) {
+                try {
+                    const freshSnap = await getDoc(platRef);
+                    if (freshSnap.exists()) {
+                        requestAnimationFrame(() => applyPlatResults(freshSnap.data()));
+                    }
+                } catch (e) { /* onSnapshot ดูแล real-time อยู่ */ }
+            }
         };
     });
 </script>
