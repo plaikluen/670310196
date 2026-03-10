@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KMN - community</title>
+    <link href="https://fonts.googleapis.com/css2?family=New+Tegomin&family=Bodoni+Moda:wght@400;700&family=KoHo:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        @font-face {
+            font-family: 'CMU';
+            src: url('font/CMU/CMU-Light.woff') format('woff');
+            font-weight: 300;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'CMU';
+            src: url('font/CMU/CMU-Regular.woff') format('woff');
+            font-weight: 400;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'CMU';
+            src: url('font/CMU/CMU-Bold.woff') format('woff');
+            font-weight: 700;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'CMU';
+            src: url('font/CMU/CMU-Italic.woff') format('woff');
+            font-weight: 400;
+            font-style: italic;
+        }
+        @font-face {
+            font-family: 'CMU';
+            src: url('font/CMU/CMU-BoldItalic.woff') format('woff');
+            font-weight: 700;
+            font-style: italic;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            cursor: url('image/cursor.png'), auto;
+        }
+
+        body {
+            background: linear-gradient(to bottom, #0A0A0A, #3D0000);
+            font-family: 'KoHo', 'Segoe UI', sans-serif;
+            color: #fff;
+            min-height: 100vh;
+        }
+
+        /* Navbar */
+        /* Navbar */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background-color: #63031B;
+            padding: 20px 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            backdrop-filter: blur(10px);
+            z-index: 100;
+        }
+
+        .navbar a {
+            color: #fff;
+            text-decoration: none;
+            font-family: 'CMU', serif;
+            font-size: 0.9em;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: color 0.3s ease;
+        }
+
+        .navbar a:hover {
+            color: #aaa;
+        }
+
+        .navbar a.active {
+            color: #fff;
+            border-bottom: 2px solid #fff;
+            padding-bottom: 2px;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 150px 60px 0 60px;
+        }
+
+        /* Search & Filter Bar */
+        .search-bar {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 36px;
+            width: 100%;
+            animation: searchBarSlideIn 0.5s ease-out 0.8s both;
+        }
+
+        .search-input-wrap {
+            position: relative;
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .search-input-wrap svg {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            opacity: 0.45;
+            pointer-events: none;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 10px 14px 10px 40px;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.14);
+            border-radius: 4px;
+            color: #fff;
+            font-family: 'KoHo', sans-serif;
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.25s ease, box-shadow 0.25s ease, background 0.2s ease;
+        }
+
+        .search-input::placeholder { color: rgba(255,255,255,0.35); }
+        .search-input:focus {
+            border-color: rgba(192,57,43,0.85);
+            background: rgba(255,255,255,0.09);
+            box-shadow: 0 0 0 3px rgba(192,57,43,0.18), 0 0 20px rgba(192,57,43,0.25);
+        }
+
+        .filter-select {
+            padding: 10px 32px 10px 14px;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.14);
+            border-radius: 4px;
+            color: #fff;
+            font-family: 'KoHo', sans-serif;
+            font-size: 0.95rem;
+            outline: none;
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='rgba(255,255,255,.45)'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            cursor: url('image/cursor.png'), auto;
+            transition: border-color 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .filter-select:focus {
+            border-color: rgba(192,57,43,0.85);
+            box-shadow: 0 0 0 3px rgba(192,57,43,0.18), 0 0 20px rgba(192,57,43,0.25);
+        }
+        .filter-select option { background: #3a0110; color: #fff; }
+
+        .search-count {
+            font-family: 'CMU', serif;
+            font-size: 0.82rem;
+            letter-spacing: 1px;
+            color: rgba(255,255,255,0.35);
+            white-space: nowrap;
+            transition: opacity 0.15s ease;
+        }
+
+        .card-wrapper.hidden { display: none; }
+
+        .card-wrapper.card-filter-out {
+            animation: cardFilterOut 0.28s ease-out forwards !important;
+            pointer-events: none;
+        }
+
+        @keyframes cardFilterOut {
+            from { opacity: 1; transform: scale(1) translateY(0); }
+            to   { opacity: 0; transform: scale(0.82) translateY(8px); }
+        }
+
+        @keyframes searchBarSlideIn {
+            from { opacity: 0; transform: translateY(-14px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Level badge colours */
+        .level-friendly { color: #4caf50; }
+        .level-neutral  { color: #ffc107; }
+        .level-hostile  { color: #e53935; }
+
+        /* Grid Layout */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        /* MacBook 14-inch Optimization */
+        @media (min-width: 1400px) and (max-width: 1600px) {
+            .container {
+                max-width: 1500px;
+                padding: 150px 50px 0 50px;
+            }
+
+            .card-grid {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 28px;
+            }
+
+            .card-wrapper {
+                aspect-ratio: 2 / 3.5;
+            }
+
+            .navbar {
+                padding: 20px 50px;
+            }
+
+            .modal-content h2 {
+                font-size: 3em;
+            }
+
+            .modal-content p {
+                font-size: 1.15em;
+            }
+        }
+
+        /* Card Styles */
+        .card-wrapper {
+            cursor: pointer;
+            aspect-ratio: 2 / 3.5;
+            overflow: hidden;
+            border-radius: 8px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.6);
+            transition: all 0.3s ease;
+            perspective: 1000px;
+        }
+
+        .card-wrapper:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.3), 0 0 40px rgba(255, 255, 255, 0.15), 0 12px 24px rgba(0, 0, 0, 0.8);
+        }
+
+
+        .card-wrapper {
+            position: relative;
+            perspective: 1000px;
+        }
+        .card-inner {
+            width: 100%;
+            height: 100%;
+            transition: transform 1.0s cubic-bezier(.4,2,.6,1);
+            transform-style: preserve-3d;
+            position: relative;
+        }
+        .card-wrapper.flipped .card-inner {
+            transform: rotateY(180deg);
+            transition: transform 1.0s cubic-bezier(.4,2,.6,1);
+        }
+        .card-wrapper.flipped-back .card-inner {
+            transform: rotateY(180deg);
+            transition: transform 0.4s cubic-bezier(.4,2,.6,1);
+        }
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            top: 0;
+            left: 0;
+        }
+        .card-face.front {
+            z-index: 2;
+        }
+        .card-face.back {
+            transform: rotateY(180deg);
+            z-index: 1;
+        }
+
+        .card-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* Responsive Grid */
+        @media (max-width: 1200px) {
+            .card-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 15px 20px;
+                gap: 20px;
+            }
+
+            .navbar a {
+                font-size: 0.8em;
+            }
+
+            .container {
+                padding: 80px 20px 0 20px;
+            }
+
+            .card-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+            }
+
+            .modal {
+                padding: 15px;
+                overflow-y: auto;
+            }
+
+            .modal-content {
+                grid-template-columns: 1fr;
+                gap: 20px;
+                align-items: start;
+            }
+
+            .modal-image {
+                aspect-ratio: 2 / 3;
+                max-height: 50vh;
+                margin: 0 auto;
+                width: 60%;
+            }
+
+            .modal-image img {
+                object-fit: contain;
+            }
+
+            .modal-content h2 {
+                font-size: 1.8em;
+            }
+
+            .modal-content p {
+                font-size: 0.95em;
+            }
+
+            .close-btn {
+                top: -40px;
+                width: 35px;
+                height: 35px;
+                font-size: 1.2em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .navbar {
+                padding: 12px 15px;
+                gap: 15px;
+            }
+
+            .navbar a {
+                font-size: 0.7em;
+                letter-spacing: 0.5px;
+            }
+
+            .container {
+                padding: 70px 12px 0 12px;
+            }
+
+            .card-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+            }
+
+            .card-wrapper {
+                aspect-ratio: 2 / 3;
+            }
+
+            .modal-content h2 {
+                font-size: 1.5em;
+            }
+
+            .close-btn {
+                top: -35px;
+            }
+        }
+
+        /* Modal/Popup */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.95);
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+        }
+
+        .modal.show {
+            display: flex;
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background-color: transparent;
+            max-width: 800px;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 45px;
+            align-items: center;
+            animation: slideIn 0.3s;
+            position: relative;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .modal-image {
+            width: 100%;
+            aspect-ratio: 2 / 3.5;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.9);
+        }
+
+        .modal-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .modal-text {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .modal-content h2 {
+            font-size: 2.8em;
+            color: #ffc107;
+            font-weight: bold;
+            line-height: 1.2;
+        }
+
+        .modal-content p {
+            font-size: 1.1em;
+            color: #fff;
+            line-height: 1.8;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: -50px;
+            right: 0;
+            background-color: #ffc107;
+            color: #333;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1.5em;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .close-btn:hover {
+            background-color: #ffb300;
+            transform: scale(1.1);
+        }
+
+        /* Responsive Modal */
+        @media (max-width: 768px) {
+            .modal-content {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .modal-image {
+                aspect-ratio: 2 / 3;
+                max-height: 50vh;
+                margin: 0 auto;
+                width: 60%;
+                height: auto;
+            }
+
+            .modal-image img {
+                object-fit: contain;
+            }
+
+            .modal-content h2 {
+                font-size: 1.8em;
+            }
+
+            .modal-content p {
+                font-size: 0.95em;
+            }
+        }
+
+        /* Card Entrance Animation */
+        @keyframes cardFadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card-wrapper {
+            opacity: 0;
+            animation: cardFadeUp 0.6s ease-out forwards;
+        }
+
+        /* Description Animations */
+        .desc-section {
+            opacity: 0;
+            animation: descFadeIn 0.8s ease-out 0.3s forwards;
+        }
+
+        @keyframes descFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Typing cursor */
+        .typing-cursor {
+            display: inline-block;
+            width: 3px;
+            height: 1em;
+            background: #fff;
+            margin-left: 2px;
+            animation: blink 0.7s infinite;
+            vertical-align: text-bottom;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        /* Particle Canvas */
+        #particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="particles"></canvas>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <a href="index.html">Home</a>
+        <a href="world.html">World</a>
+        <a href="anomaly.html" class="active">Anomaly</a>
+        <a href="commu.html">Commu</a>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container">
+        <div class="desc-section" style="width:100%;margin:0 0 32px 0; font-family:'KoHo', sans-serif; line-height:1.8; font-size:1.1em;">
+            <span id="anomaly-title" style="font-size:2.5em; font-weight:bold; font-style:italic; display:block; margin-bottom:12px;"></span>
+            <span id="desc-text" style="opacity:0; transition: opacity 0.8s ease;"></span>
+        </div>
+        <div class="search-bar">
+            <div class="search-input-wrap">
+                <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <input class="search-input" id="searchInput" type="text" placeholder="ค้นหาชื่อหรือรหัส AMN-xxx...">
+            </div>
+            <select class="filter-select" id="filterLevel">
+                <option value="">Level: All</option>
+                <option value="friendly">Friendly</option>
+                <option value="neutral">Neutral</option>
+                <option value="hostile">Hostile</option>
+            </select>
+            <select class="filter-select" id="filterType">
+                <option value="">Type: All</option>
+                <option value="entity">Entity</option>
+                <option value="phenomenon">Phenomenon</option>
+            </select>
+            <span class="search-count" id="searchCount"></span>
+        </div>
+        <div class="card-grid" id="cardGrid"></div>
+    </div>
+
+    <!-- Modal/Popup -->
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeModal()">×</button>
+            <div class="modal-image">
+                <img id="modalImage" src="" alt="Monster">
+            </div>
+            <div class="modal-text">
+                <h2 id="modalTitle">Monster Name</h2>
+                <div style="color:#bbb; font-size:1em; margin-bottom:2px;">
+                    <span id="modalLevel">Level: none</span> &nbsp;|&nbsp; <span id="modalType">Type: none</span>
+                </div>
+                <p id="modalDescription">Monster Description</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const monsters = [
+            { name: "AMN-001", displayName: "AMN-001", level: "hostile",  type: "entity",     description: "??????????????????????????????????", image: "image/monters1.png" },
+            { name: "AMN-002", displayName: "AMN-002", level: "neutral",  type: "entity",     description: "??????????????????????????????????", image: "image/monters2.png" },
+            { name: "AMN-003", displayName: "AMN-003", level: "hostile",  type: "phenomenon", description: "??????????????????????????????????", image: "image/backcard.png" },
+            { name: "AMN-004", displayName: "AMN-004", level: "friendly", type: "entity",     description: "??????????????????????????????????", image: "image/backcard.png" },
+            { name: "AMN-005", displayName: "AMN-005", level: "neutral",  type: "phenomenon", description: "??????????????????????????????????", image: "image/backcard.png" },
+            { name: "AMN-006", displayName: "AMN-006", level: "hostile",  type: "entity",     description: "??????", image: "image/backcard.png" },
+            { name: "AMN-007", displayName: "AMN-007", level: "hostile",  type: "entity",     description: "??????", image: "image/backcard.png" },
+            { name: "AMN-008", displayName: "AMN-008", level: "neutral",  type: "phenomenon", description: "??????", image: "image/backcard.png" },
+            { name: "AMN-009", displayName: "AMN-009", level: "friendly", type: "entity",     description: "??????", image: "image/backcard.png" },
+            { name: "AMN-010", displayName: "AMN-010", level: "neutral",  type: "entity",     description: "??????", image: "image/backcard.png" },
+            { name: "AMN-011", displayName: "AMN-011", level: "hostile",  type: "phenomenon", description: "??????", image: "image/backcard.png" },
+            { name: "AMN-012", displayName: "AMN-012", level: "neutral",  type: "entity",     description: "??????", image: "image/backcard.png" },
+            { name: "AMN-013", displayName: "AMN-013", level: "hostile",  type: "phenomenon", description: "??????", image: "image/backcard.png" },
+            { name: "AMN-014", displayName: "AMN-014", level: "friendly", type: "entity",     description: "??????", image: "image/backcard.png" },
+            { name: "AMN-015", displayName: "AMN-015", level: "neutral",  type: "entity",     description: "??????", image: "image/backcard.png" },
+            { name: "AMN-016", displayName: "AMN-016", level: "hostile",  type: "phenomenon", description: "??????", image: "image/backcard.png" },
+            { name: "AMN-017", displayName: "AMN-017", level: "neutral",  type: "entity",     description: "??????", image: "image/backcard.png" },
+            { name: "AMN-018", displayName: "AMN-018", level: "friendly", type: "phenomenon", description: "??????", image: "image/backcard.png" },
+            { name: "AMN-019", displayName: "AMN-019", level: "hostile",  type: "entity",     description: "??????", image: "image/backcard.png" }
+        ];
+
+        let currentFlippedCardId = null;
+
+        // Initialize the grid
+        function initializeGrid() {
+            const cardGrid = document.getElementById('cardGrid');
+            
+            monsters.forEach((monster, index) => {
+                const cardWrapper = document.createElement('div');
+                cardWrapper.className = 'card-wrapper';
+                cardWrapper.id = `card-${index}`;
+                
+
+                                cardWrapper.innerHTML = `
+                                    <div class="card-inner">
+                                        <div class="card-face front"><img src="${monster.image}" alt="${monster.name}" onerror="this.style.backgroundColor='#3a3a3a'"></div>
+                                        <div class="card-face back"><img src="image/backcard.png" alt="Back"></div>
+                                    </div>
+                                `;
+                
+
+                // Click to open modal
+                cardWrapper.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    // Add flip animation (1 รอบ ช้า)
+                    cardWrapper.classList.remove('flipped-back');
+                    void cardWrapper.offsetWidth;
+                    cardWrapper.classList.add('flipped');
+                    setTimeout(() => {
+                        openModal(monster, index);
+                        currentFlippedCardId = index;
+                    }, 1200);
+                });
+                
+                cardGrid.appendChild(cardWrapper);
+            });
+        }
+
+        // Modal functions
+        function openModal(monster, cardIndex) {
+            document.getElementById('modalTitle').textContent = monster.name;
+            document.getElementById('modalDescription').textContent = monster.description;
+            document.getElementById('modalImage').src = monster.image;
+            document.getElementById('modalImage').onerror = function() {
+                this.style.backgroundColor = '#3a3a3a';
+            };
+            document.getElementById('modalLevel').textContent = 'Level: ' + (monster.level || 'none');
+            document.getElementById('modalLevel').className = 'level-' + (monster.level || '');
+            document.getElementById('modalType').textContent  = 'Type: '  + (monster.type  || 'none');
+            document.getElementById('modal').classList.add('show');
+        }
+
+        function closeModal() {
+            // Close modal immediately
+            document.getElementById('modal').classList.remove('show');
+            // Flip card back to front (1 รอบ)
+            if (currentFlippedCardId !== null) {
+                const cardWrapper = document.getElementById(`card-${currentFlippedCardId}`);
+                if (cardWrapper) {
+                    cardWrapper.classList.remove('flipped');
+                    void cardWrapper.offsetWidth;
+                    cardWrapper.classList.add('flipped-back');
+                    setTimeout(() => {
+                        cardWrapper.classList.remove('flipped-back');
+                        currentFlippedCardId = null;
+                    }, 600);
+                }
+            }
+        }
+
+        // Close modal when clicking outside
+        window.addEventListener('click', function(event) {
+            const modal = document.getElementById('modal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        });
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeModal();
+            }
+        });
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeGrid();
+
+        // Search & Filter
+        function applyFilters() {
+            const q     = document.getElementById('searchInput').value.trim().toLowerCase();
+            const level = document.getElementById('filterLevel').value.toLowerCase();
+            const type  = document.getElementById('filterType').value.toLowerCase();
+            let visible = 0;
+            document.querySelectorAll('.card-wrapper').forEach(function(card, i) {
+                const m = monsters[i];
+                const matchQ     = !q     || m.name.toLowerCase().includes(q) || (m.displayName && m.displayName.toLowerCase().includes(q));
+                const matchLevel = !level || m.level === level;
+                const matchType  = !type  || m.type  === type;
+                if (matchQ && matchLevel && matchType) {
+                    if (card.classList.contains('hidden')) {
+                        card.classList.remove('hidden');
+                        card.style.animationDelay = '0s';
+                    }
+                    visible++;
+                } else {
+                    if (!card.classList.contains('hidden') && !card.classList.contains('card-filter-out')) {
+                        card.classList.add('card-filter-out');
+                        setTimeout(() => {
+                            card.classList.add('hidden');
+                            card.classList.remove('card-filter-out');
+                        }, 280);
+                    }
+                }
+            });
+            const countEl = document.getElementById('searchCount');
+            countEl.style.opacity = '0';
+            setTimeout(() => {
+                countEl.textContent = visible + ' / ' + monsters.length + ' anomalies';
+                countEl.style.opacity = '1';
+            }, 150);
+        }
+
+        document.getElementById('searchInput').addEventListener('input',  applyFilters);
+        document.getElementById('filterLevel').addEventListener('change', applyFilters);
+        document.getElementById('filterType').addEventListener('change',  applyFilters);
+        applyFilters();
+
+        // === Staggered card entrance ===
+            document.querySelectorAll('.card-wrapper').forEach((card, i) => {
+                card.style.animationDelay = (i * 0.08) + 's';
+            });
+
+            // === Typing effect for "Anomaly" ===
+            const titleEl = document.getElementById('anomaly-title');
+            const titleText = 'Anomaly';
+            let charIndex = 0;
+            const cursor = document.createElement('span');
+            cursor.className = 'typing-cursor';
+            titleEl.appendChild(cursor);
+
+            function typeChar() {
+                if (charIndex < titleText.length) {
+                    titleEl.insertBefore(document.createTextNode(titleText[charIndex]), cursor);
+                    charIndex++;
+                    setTimeout(typeChar, 120);
+                } else {
+                    // Remove cursor after typing done
+                    setTimeout(() => cursor.remove(), 1000);
+                    // Fade in description text
+                    showDescription();
+                }
+            }
+            setTimeout(typeChar, 500);
+
+            // === Description fade-in with highlighted words ===
+            function showDescription() {
+                const descEl = document.getElementById('desc-text');
+                descEl.innerHTML = '\u0e2a\u0e34\u0e48\u0e07\u0e41\u0e1b\u0e25\u0e01\u0e1b\u0e25\u0e2d\u0e21\u0e17\u0e35\u0e48\u0e41\u0e1d\u0e07\u0e15\u0e31\u0e27\u0e2d\u0e22\u0e39\u0e48\u0e01\u0e31\u0e1a\u0e21\u0e19\u0e38\u0e29\u0e22\u0e4c \u0e44\u0e21\u0e48\u0e17\u0e23\u0e32\u0e1a\u0e17\u0e35\u0e48\u0e21\u0e32\u0e41\u0e19\u0e48\u0e0a\u0e31\u0e14 \u0e17\u0e27\u0e48\u0e32\u0e2d\u0e07\u0e04\u0e4c\u0e01\u0e23 Anomalous Oversight Bureau \u0e2b\u0e23\u0e37\u0e2d A.O.B \u0e44\u0e14\u0e49\u0e08\u0e33\u0e01\u0e31\u0e14\u0e04\u0e27\u0e32\u0e21\u0e1e\u0e27\u0e01\u0e21\u0e31\u0e19\u0e14\u0e49\u0e27\u0e22\u0e15\u0e31\u0e27\u0e22\u0e48\u0e2d ANM \u0e41\u0e25\u0e30\u0e15\u0e32\u0e21\u0e14\u0e49\u0e27\u0e22\u0e2b\u0e21\u0e32\u0e22\u0e40\u0e25\u0e02\u0e1b\u0e23\u0e30\u0e08\u0e33\u0e15\u0e31\u0e27 \u0e0b\u0e36\u0e48\u0e07\u0e41\u0e1a\u0e48\u0e07\u0e2d\u0e2d\u0e01\u0e04\u0e27\u0e32\u0e21\u0e2d\u0e31\u0e19\u0e15\u0e23\u0e32\u0e22\u0e40\u0e1b\u0e47\u0e19 3 \u0e23\u0e30\u0e14\u0e31\u0e1a \u0e44\u0e14\u0e49\u0e41\u0e01\u0e48 <span style="color:#ffc107; font-weight:bold;">Friendly</span> <span style="color:#ffc107; font-weight:bold;">Neutral</span> \u0e41\u0e25\u0e30 <span style="color:#ffc107; font-weight:bold;">Hostile</span>';
+                descEl.style.opacity = '1';
+            }
+
+            // === Particle Background ===
+            const canvas = document.getElementById('particles');
+            const ctx = canvas.getContext('2d');
+            let particles = [];
+
+            function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+
+            for (let i = 0; i < 50; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    r: Math.random() * 1.5 + 0.5,
+                    dx: (Math.random() - 0.5) * 0.3,
+                    dy: (Math.random() - 0.5) * 0.3,
+                    opacity: Math.random() * 0.3 + 0.1
+                });
+            }
+
+            function drawParticles() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                particles.forEach(p => {
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(255, 255, 255, ${p.opacity})`;
+                    ctx.fill();
+                    p.x += p.dx;
+                    p.y += p.dy;
+                    if (p.x < 0 || p.x > canvas.width) p.dx *= -1;
+                    if (p.y < 0 || p.y > canvas.height) p.dy *= -1;
+                });
+                requestAnimationFrame(drawParticles);
+            }
+            drawParticles();
+
+            // === 3D Card Tilt ===
+            document.querySelectorAll('.card-wrapper').forEach(card => {
+                card.addEventListener('mousemove', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+                    const rotateX = ((y - centerY) / centerY) * -10;
+                    const rotateY = ((x - centerX) / centerX) * 10;
+                    card.style.transform = `perspective(600px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-8px)`;
+                });
+
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = '';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

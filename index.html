@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KMN-community</title>
+    <link href="https://fonts.googleapis.com/css2?family=New+Tegomin&family=Bodoni+Moda:wght@400;700&family=KoHo:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        @font-face {
+            font-family: 'CMU';
+            src: url('font/CMU/CMU-Light.woff') format('woff');
+            font-weight: 300;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'CMU';
+            src: url('font/CMU/CMU-Regular.woff') format('woff');
+            font-weight: 400;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'CMU';
+            src: url('font/CMU/CMU-Bold.woff') format('woff');
+            font-weight: 700;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'CMU';
+            src: url('font/CMU/CMU-Italic.woff') format('woff');
+            font-weight: 400;
+            font-style: italic;
+        }
+        @font-face {
+            font-family: 'CMU';
+            src: url('font/CMU/CMU-LightItalic.woff') format('woff');
+            font-weight: 300;
+            font-style: italic;
+        }
+        @font-face {
+            font-family: 'CMU';
+            src: url('font/CMU/CMU-BoldItalic.woff') format('woff');
+            font-weight: 700;
+            font-style: italic;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            cursor: url('image/cursor.png'), auto;
+        }
+
+        body { 
+            font-family: 'KoHo', 'Segoe UI', sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #050505;
+            color: #fff;
+        }
+
+        /* Navbar */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background-color: #63031B;
+            padding: 20px 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            backdrop-filter: blur(10px);
+            z-index: 100;
+        }
+
+        .navbar a {
+            color: #fff;
+            text-decoration: none;
+            font-family: 'CMU', serif;
+            font-size: 0.9em;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: color 0.3s ease;
+        }
+
+        .navbar a:hover {
+            color: #aaa;
+        }
+
+        .navbar a.active {
+            color: #fff;
+            border-bottom: 2px solid #fff;
+            padding-bottom: 2px;
+        }
+
+        .card { 
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+        }
+
+        h1 { 
+            color: #fff;
+            font-family: 'CMU', serif;
+            font-style: italic;
+            font-weight: 300;
+            font-size: 1.9rem;
+            letter-spacing: 2px;
+            line-height: 1.75;
+            margin-bottom: 0;
+        }
+
+        .counter { 
+            font-size: 3.5rem;
+            font-weight: bold;
+            color: #fff;
+            margin: 1.5rem 0;
+            transition: transform 0.3s ease;
+        }
+
+        .counter.pulse {
+            animation: counterPulse 0.4s ease;
+        }
+
+        @keyframes counterPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        /* Progress Bar */
+        .progress-wrap {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            overflow: hidden;
+            margin: 0.5rem 0 1.5rem;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: #63031B;
+            border-radius: 3px;
+            transition: width 1s ease;
+        }
+
+        button { 
+            background-color: #63031B;
+            color: #fff;
+            border: none;
+            padding: 14px 68px;
+            font-family: 'Bodoni Moda', serif;
+            font-size: 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+            position: relative;
+            animation: btnGlow 2.5s ease-in-out infinite;
+        }
+
+        @keyframes btnGlow {
+            0%, 100% { box-shadow: 0 0 5px rgba(99, 3, 27, 0.3); }
+            50% { box-shadow: 0 0 20px rgba(99, 3, 27, 0.8), 0 0 40px rgba(99, 3, 27, 0.4); }
+        }
+
+        button:hover { 
+            border-color: #fff;
+        }
+
+        button:disabled { 
+            border-color: rgba(255, 255, 255, 0.15);
+            color: #555;
+            cursor: not-allowed;
+            animation: none;
+            box-shadow: none;
+        }
+
+        #status { 
+            margin-top: 1rem;
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        .eng {
+            font-family: 'Bodoni Moda', serif;
+            font-style: italic;
+            font-size: 1.12em;
+            letter-spacing: 3px;
+        }
+
+        .poll-label {
+            font-family: 'CMU', serif;
+            font-style: italic;
+            font-size: 0.78rem;
+            letter-spacing: 5px;
+            color: rgba(255, 255, 255, 0.35);
+            margin-bottom: 0;
+            text-transform: uppercase;
+        }
+
+        .poll-deco-line {
+            width: 55%;
+            height: 1px;
+            background: linear-gradient(to right, transparent, rgba(192, 57, 43, 0.65), transparent);
+            margin: 18px auto;
+        }
+
+        /* Tooltip */
+        .btn-wrap {
+            display: inline-block;
+            position: relative;
+        }
+
+        .tooltip {
+            font-size: 0.75rem;
+            color: #666;
+            margin-top: 0.6rem;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out forwards;
+            animation-delay: 1s;
+        }
+
+        /* Particle Canvas */
+        #particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .card {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Confetti */
+        .confetti-piece {
+            position: fixed;
+            width: 8px;
+            height: 8px;
+            border-radius: 2px;
+            z-index: 200;
+            pointer-events: none;
+        }
+
+        /* Entrance Animations */
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card .poll-label,
+        .card .poll-deco-line,
+        .card h1,
+        .card .counter,
+        .card .progress-wrap,
+        .card .btn-wrap,
+        .card #status {
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out forwards;
+        }
+
+        .card .poll-label {
+            animation-delay: 0.1s;
+        }
+
+        .card h1 {
+            animation-delay: 0.25s;
+        }
+
+        .card .poll-deco-line {
+            animation-delay: 0.42s;
+        }
+
+        .card .counter {
+            animation-delay: 0.56s;
+        }
+
+        .card .progress-wrap {
+            animation-delay: 0.6s;
+        }
+
+        .card .btn-wrap {
+            animation-delay: 0.8s;
+        }
+
+        .card #status {
+            animation-delay: 1s;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 15px 20px;
+                gap: 20px;
+            }
+
+            .navbar a {
+                font-size: 0.8em;
+            }
+
+            h1 {
+                font-size: 1.3rem;
+            }
+
+            .counter {
+                font-size: 2.8rem;
+            }
+
+            button {
+                padding: 12px 50px;
+                font-size: 20px;
+            }
+
+            .card {
+                max-width: 340px;
+                width: 92%;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .navbar {
+                padding: 12px 15px;
+                gap: 15px;
+            }
+
+            .navbar a {
+                font-size: 0.7em;
+                letter-spacing: 0.5px;
+            }
+
+            h1 {
+                font-size: 1.1rem;
+            }
+
+            .counter {
+                font-size: 2.2rem;
+            }
+
+            button {
+                padding: 10px 40px;
+                font-size: 18px;
+            }
+        }
+
+        /* ── Platform Poll ── */
+        .platform-card {
+            display: none;
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            max-width: 420px;
+            width: 90%;
+            margin-top: 36px;
+            padding-bottom: 60px;
+            opacity: 0;
+        }
+        .platform-card.visible {
+            display: block;
+            animation: fadeUp 0.7s ease-out 0.1s forwards;
+        }
+        .plat-label {
+            font-family: 'CMU', serif;
+            font-style: italic;
+            font-size: 0.78rem;
+            letter-spacing: 5px;
+            color: rgba(255, 255, 255, 0.35);
+            text-transform: uppercase;
+            margin-bottom: 16px;
+        }
+        .plat-question {
+            font-family: 'CMU', serif;
+            font-style: italic;
+            font-weight: 300;
+            font-size: 1.15rem;
+            letter-spacing: 1px;
+            color: #fff;
+            margin-bottom: 28px;
+            line-height: 1.75;
+        }
+        .plat-btns {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 28px;
+        }
+        .plat-btn {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            color: rgba(255, 255, 255, 0.75);
+            font-family: 'CMU', serif;
+            font-size: 0.95rem;
+            letter-spacing: 2.5px;
+            padding: 12px 24px;
+            border-radius: 3px;
+            cursor: pointer;
+            animation: none;
+            box-shadow: none;
+            transition: border-color 0.25s, background 0.25s, color 0.25s;
+        }
+        .plat-btn:hover:not(:disabled) {
+            border-color: rgba(192, 57, 43, 0.7);
+            background: rgba(99, 3, 27, 0.2);
+            color: #fff;
+        }
+        .plat-btn.selected {
+            border-color: #c0392b;
+            background: rgba(99, 3, 27, 0.35);
+            color: #fff;
+        }
+        .plat-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+        .plat-btn.selected:disabled {
+            opacity: 1;
+        }
+        .plat-results {
+            display: none;
+            flex-direction: column;
+            gap: 16px;
+            text-align: left;
+        }
+        .plat-results.show {
+            display: flex;
+        }
+        .plat-row-head {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+        .plat-row-name {
+            font-family: 'CMU', serif;
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+        .plat-row-pct {
+            font-family: 'CMU', serif;
+            font-size: 0.82rem;
+            color: rgba(255, 255, 255, 0.38);
+            min-width: 36px;
+            text-align: right;
+        }
+        .plat-bar-track {
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.07);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        .plat-bar-fill {
+            height: 100%;
+            background: linear-gradient(to right, #63031B, #c0392b);
+            border-radius: 2px;
+            width: 0%;
+            transition: width 0.85s cubic-bezier(.4,0,.2,1);
+        }
+        .plat-total-note {
+            font-family: 'CMU', serif;
+            font-style: italic;
+            font-size: 0.72rem;
+            color: rgba(255, 255, 255, 0.2);
+            text-align: center;
+            margin-top: 4px;
+        }
+        .plat-live-count {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .plat-live-number {
+            font-family: 'CMU', serif;
+            font-size: 2.4rem;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: 2px;
+            line-height: 1;
+            transition: transform 0.25s ease;
+        }
+        .plat-live-number.pulse {
+            animation: counterPulse 0.35s ease;
+        }
+        .plat-live-label {
+            font-family: 'CMU', serif;
+            font-style: italic;
+            font-size: 0.72rem;
+            letter-spacing: 3px;
+            color: rgba(255,255,255,0.25);
+            margin-top: 4px;
+        }
+        .plat-live-dot {
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            background: #c0392b;
+            border-radius: 50%;
+            margin-right: 5px;
+            vertical-align: middle;
+            animation: livePulse 1.4s ease-in-out infinite;
+        }
+        @keyframes livePulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50%       { opacity: 0.3; transform: scale(0.7); }
+        }
+        @media (max-width: 768px) {
+            .platform-card { max-width: 340px; }
+        }
+    </style>
+</head>
+<body>
+
+<canvas id="particles"></canvas>
+
+<!-- Navbar -->
+<nav class="navbar">
+    <a href="index.html" class="active">Home</a>
+    <a href="world.html">World</a>
+    <a href="anomaly.html">Anomaly</a>
+    <a href="commu.html">Commu</a>
+</nav>
+
+<div class="card">
+    <p class="poll-label">— สอบถามความสนใจ —</p>
+    <h1>คุณมีความสนใจเข้าร่วม<br><span class="eng">KMN-commu</span> หรือไม่?</h1>
+    <div class="poll-deco-line"></div>
+    <div class="counter"><span id="count">0</span>/100</div>
+    <div class="progress-wrap"><div class="progress-bar" id="progress"></div></div>
+    <div class="btn-wrap">
+        <button id="btn-vote">สนใจ</button>
+        <div class="tooltip">ล็อกอิน Google เพื่อยืนยัน</div>
+    </div>
+    <p id="status">กำลังโหลดข้อมูล...</p>
+</div>
+
+<!-- Platform Poll -->
+<div class="platform-card" id="platform-card">
+    <div class="poll-deco-line"></div>
+    <p class="plat-label">— platform poll —</p>
+    <p class="plat-question">คุณอยากให้คอมมูเปิดบนแพลตฟอร์มไหน?</p>
+    <div id="plat-btns">
+        <div class="plat-btns">
+            <button class="plat-btn" data-plat="bsky_discord">🦋 Bluesky + Discord</button>
+            <button class="plat-btn" data-plat="mixi2">Mixi2</button>
+        </div>
+    </div>
+    <div class="plat-results" id="plat-results">
+        <div class="plat-live-count">
+            <div class="plat-live-number" id="plat-live-number">0</div>
+            <div class="plat-live-label"><span class="plat-live-dot"></span>total votes · realtime</div>
+        </div>
+        <div class="poll-deco-line" style="margin-bottom:20px"></div>
+        <div class="plat-row">
+            <div class="plat-row-head">
+                <span class="plat-row-name">🦋 Bluesky + Discord</span>
+                <span class="plat-row-pct" id="pct-bsky_discord">0%</span>
+            </div>
+            <div class="plat-bar-track"><div class="plat-bar-fill" id="bar-bsky_discord"></div></div>
+        </div>
+        <div class="plat-row">
+            <div class="plat-row-head">
+                <span class="plat-row-name">Mixi2</span>
+                <span class="plat-row-pct" id="pct-mixi2">0%</span>
+            </div>
+            <div class="plat-bar-track"><div class="plat-bar-fill" id="bar-mixi2"></div></div>
+        </div>
+        <p class="plat-total-note" id="plat-total-note"></p>
+    </div>
+</div>
+
+<script type="module">
+    // นำเข้า Firebase Functions
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { getFirestore, doc, getDoc, setDoc, updateDoc, increment, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    // ข้อมูล Config ของคุณ
+    const firebaseConfig = {
+        apiKey: "AIzaSyDNh6zP1ZAosCAB0snUW_T4WNAvHUQ5Op4",
+        authDomain: "kmn-commu.firebaseapp.com",
+        projectId: "kmn-commu",
+        storageBucket: "kmn-commu.firebasestorage.app",
+        messagingSenderId: "841625495638",
+        appId: "1:841625495638:web:42230e13254dd19ce6f3f7",
+        measurementId: "G-KS828JXQE1"
+    };
+
+    // Initialize
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    const provider = new GoogleAuthProvider();
+
+    // ฟังก์ชันอนิเมชั่นสุ่มตัวเลข
+    let firstLoad = true;
+    function scrambleToNumber(target) {
+        const duration = 1500;
+        const intervalTime = 50;
+        const steps = duration / intervalTime;
+        let currentStep = 0;
+
+        const interval = setInterval(() => {
+            currentStep++;
+            if (currentStep < steps) {
+                countDisplay.innerText = Math.floor(Math.random() * 100);
+            } else {
+                clearInterval(interval);
+                countDisplay.innerText = target;
+            }
+        }, intervalTime);
+    }
+
+    const btnVote = document.getElementById('btn-vote');
+    const countDisplay = document.getElementById('count');
+    const statusText = document.getElementById('status');
+    const progressBar = document.getElementById('progress');
+    const counterEl = document.querySelector('.counter');
+
+    // Platform poll DOM refs
+    const platformCard = document.getElementById('platform-card');
+    const platBtnsWrap = document.getElementById('plat-btns');
+    const platResults  = document.getElementById('plat-results');
+    const platBtns     = document.querySelectorAll('.plat-btn');
+    let platListenerActive = false;
+
+    function setupPlatformListener() {
+        if (platListenerActive) return;
+        platListenerActive = true;
+        onSnapshot(doc(db, 'platformPoll', 'votes'), (snap) => {
+            if (snap.exists()) applyPlatResults(snap.data());
+        });
+    }
+
+    function showPlatformPoll() {
+        platformCard.classList.add('visible');
+        setupPlatformListener();
+    }
+
+    function markPlatformVoted(platform) {
+        platBtns.forEach(b => {
+            b.disabled = true;
+            if (b.dataset.plat === platform) b.classList.add('selected');
+        });
+        platBtnsWrap.style.display = 'none';
+        platResults.classList.add('show');
+    }
+
+    // === Particle Background ===
+    const canvas = document.getElementById('particles');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+
+    function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    for (let i = 0; i < 50; i++) {
+        particles.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            r: Math.random() * 1.5 + 0.5,
+            dx: (Math.random() - 0.5) * 0.3,
+            dy: (Math.random() - 0.5) * 0.3,
+            opacity: Math.random() * 0.4 + 0.1
+        });
+    }
+
+    function drawParticles() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles.forEach(p => {
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(255, 255, 255, ${p.opacity})`;
+            ctx.fill();
+            p.x += p.dx;
+            p.y += p.dy;
+            if (p.x < 0 || p.x > canvas.width) p.dx *= -1;
+            if (p.y < 0 || p.y > canvas.height) p.dy *= -1;
+        });
+        requestAnimationFrame(drawParticles);
+    }
+    drawParticles();
+
+    // === Confetti Function ===
+    function launchConfetti() {
+        const colors = ['#63031B', '#ff4757', '#ffc107', '#fff', '#ff6b81'];
+        for (let i = 0; i < 60; i++) {
+            const piece = document.createElement('div');
+            piece.classList.add('confetti-piece');
+            piece.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            piece.style.left = (Math.random() * 100) + 'vw';
+            piece.style.top = '-10px';
+            piece.style.transform = `rotate(${Math.random() * 360}deg)`;
+            document.body.appendChild(piece);
+
+            const destX = (Math.random() - 0.5) * 300;
+            const destY = Math.random() * window.innerHeight + 200;
+            const dur = Math.random() * 2000 + 1500;
+
+            piece.animate([
+                { transform: `translate(0, 0) rotate(0deg)`, opacity: 1 },
+                { transform: `translate(${destX}px, ${destY}px) rotate(${Math.random() * 720}deg)`, opacity: 0 }
+            ], { duration: dur, easing: 'cubic-bezier(.25,.46,.45,.94)' });
+
+            setTimeout(() => piece.remove(), dur);
+        }
+    }
+
+    // === Counter Pulse ===
+    function pulseCounter() {
+        counterEl.classList.add('pulse');
+        setTimeout(() => counterEl.classList.remove('pulse'), 400);
+    }
+
+    // === Update Progress Bar ===
+    function updateProgress(val) {
+        progressBar.style.width = Math.min(val, 100) + '%';
+    }
+
+    // 1. ดึงยอดจาก Database แบบ Real-time
+    onSnapshot(doc(db, "survey", "total"), (docSnap) => {
+        if (docSnap.exists()) {
+            const val = docSnap.data().value;
+            if (firstLoad) {
+                firstLoad = false;
+                scrambleToNumber(val);
+                setTimeout(() => updateProgress(val), 1600);
+            } else {
+                countDisplay.innerText = val;
+                updateProgress(val);
+                pulseCounter();
+            }
+            statusText.innerText = "";
+        } else {
+            statusText.innerText = "เกิดข้อผิดพลาดในการดึงข้อมูล";
+        }
+    });
+
+    // 2. ตรวจสอบสถานะการล็อกอิน
+    onAuthStateChanged(auth, async (user) => {
+        if (user) {
+            const voterRef = doc(db, "voters", user.uid);
+            const voterSnap = await getDoc(voterRef);
+            if (voterSnap.exists()) {
+                btnVote.innerText = "คุณกดสนใจไปแล้ว";
+                btnVote.disabled = true;
+                showPlatformPoll();
+                if (voterSnap.data().platform) {
+                    markPlatformVoted(voterSnap.data().platform);
+                }
+            } else {
+                btnVote.innerText = "โปรดรีเฟรชหน้าเว็บไซต์";
+            }
+        }
+    });
+
+    // 3. ฟังก์ชันการกดปุ่ม
+    btnVote.onclick = async () => {
+        try {
+            // ถ้ายังไม่ได้ล็อกอิน ให้เด้ง Pop-up
+            const result = await signInWithPopup(auth, provider);
+            const user = result.user;
+            
+            // เช็กซ้ำอีกรอบใน Database
+            const voterRef = doc(db, "voters", user.uid);
+            const voterSnap = await getDoc(voterRef);
+
+            if (!voterSnap.exists()) {
+                // บันทึกการโหวต
+                await setDoc(voterRef, { email: user.email, timestamp: new Date() });
+                // บวกยอดรวม
+                await updateDoc(doc(db, "survey", "total"), {
+                    value: increment(1)
+                });
+                launchConfetti();
+                showPlatformPoll();
+            } else {
+                showPlatformPoll();
+                if (voterSnap.data().platform) {
+                    markPlatformVoted(voterSnap.data().platform);
+                }
+                alert("คุณเคยลงชื่อไปแล้ว");
+            }
+        } catch (error) {
+            console.error(error);
+            alert("เกิดข้อผิดพลาด: " + error.message);
+        }
+    };
+
+    // Platform poll vote handlers
+    const platRef = doc(db, "platformPoll", "votes");
+
+    function applyPlatResults(d) {
+        const total = (d.bsky_discord || 0) + (d.mixi2 || 0);
+        const pct = (v) => total > 0 ? Math.round((v / total) * 100) : 0;
+        document.getElementById('pct-bsky_discord').innerText = pct(d.bsky_discord || 0) + '%';
+        document.getElementById('pct-mixi2').innerText        = pct(d.mixi2        || 0) + '%';
+        document.getElementById('bar-bsky_discord').style.width = pct(d.bsky_discord || 0) + '%';
+        document.getElementById('bar-mixi2').style.width        = pct(d.mixi2        || 0) + '%';
+        document.getElementById('plat-total-note').innerText = '';
+
+        const liveEl = document.getElementById('plat-live-number');
+        if (liveEl) {
+            liveEl.innerText = total;
+            liveEl.classList.remove('pulse');
+            void liveEl.offsetWidth; // reflow
+            liveEl.classList.add('pulse');
+            setTimeout(() => liveEl.classList.remove('pulse'), 350);
+        }
+    }
+
+    platBtns.forEach(btn => {
+        btn.onclick = async () => {
+            const plat = btn.dataset.plat;
+            const user = auth.currentUser;
+            if (!user) return;
+
+            platBtns.forEach(b => b.disabled = true);
+            btn.classList.add('selected');
+
+            try {
+                const voterRef = doc(db, "voters", user.uid);
+                const voterSnap = await getDoc(voterRef);
+                if (voterSnap.exists() && !voterSnap.data().platform) {
+                    await updateDoc(voterRef, { platform: plat });
+                    // setDoc + merge:true รองรับทั้งกรณี doc มีอยู่แล้วและยังไม่มี
+                    await setDoc(platRef, { [plat]: increment(1) }, { merge: true });
+                }
+            } catch (e) {
+                console.error(e);
+            }
+
+            // แสดง results div ก่อน (bars ยังอยู่ที่ 0%)
+            platBtnsWrap.style.display = 'none';
+            platResults.classList.add('show');
+
+            // รอ 1 frame ให้ browser paint ก่อน แล้วค่อย set width
+            // เพื่อให้ CSS transition ทำงานได้ถูกต้อง
+            try {
+                const freshSnap = await getDoc(platRef);
+                if (freshSnap.exists()) {
+                    requestAnimationFrame(() => applyPlatResults(freshSnap.data()));
+                }
+            } catch (e) { /* onSnapshot ยังดูแล real-time อยู่ */ }
+        };
+    });
+</script>
+
+</body>
+</html>

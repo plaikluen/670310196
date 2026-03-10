@@ -1,0 +1,654 @@
+/* =====================
+   FONTS
+   ===================== */
+@font-face {
+    font-family: 'CMU';
+    src: url('font/CMU/CMU-Light.woff') format('woff');
+    font-weight: 300;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'CMU';
+    src: url('font/CMU/CMU-Regular.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'CMU';
+    src: url('font/CMU/CMU-Bold.woff') format('woff');
+    font-weight: 700;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'CMU';
+    src: url('font/CMU/CMU-Italic.woff') format('woff');
+    font-weight: 400;
+    font-style: italic;
+}
+@font-face {
+    font-family: 'CMU';
+    src: url('font/CMU/CMU-LightItalic.woff') format('woff');
+    font-weight: 300;
+    font-style: italic;
+}
+@font-face {
+    font-family: 'CMU';
+    src: url('font/CMU/CMU-BoldItalic.woff') format('woff');
+    font-weight: 700;
+    font-style: italic;
+}
+
+/* =====================
+   BASE
+   ===================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    cursor: url('image/cursor.png'), auto;
+}
+
+body {
+    font-family: 'KoHo', sans-serif;
+    background-color: #050505;
+    color: #fff;
+}
+
+/* Particle Canvas */
+#world-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.55;
+}
+
+/* make sure all sections sit above canvas */
+.navbar,
+.world-hero,
+.dream-section,
+.lore-section {
+    position: relative;
+    z-index: 1;
+}
+
+/* =====================
+   NAVBAR
+   ===================== */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background-color: #63031B;
+    padding: 20px 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    backdrop-filter: blur(10px);
+    z-index: 100;
+}
+
+.navbar a {
+    color: #fff;
+    text-decoration: none;
+    font-family: 'CMU', serif;
+    font-size: 0.9em;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: color 0.3s ease;
+}
+
+.navbar a:hover {
+    color: #aaa;
+}
+
+.navbar a.active {
+    color: #fff;
+    border-bottom: 2px solid #fff;
+    padding-bottom: 2px;
+}
+
+/* =====================
+   WORLD HERO
+   ===================== */
+.world-hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 100px 40px 60px;
+    margin-top: 62px;
+    overflow: hidden;
+}
+
+.world-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(ellipse at 50% 50%, rgba(99, 3, 27, 0.35) 0%, transparent 65%),
+        url('image/commu_bg.png') center center / cover no-repeat;
+    opacity: 0.4;
+    z-index: 0;
+    animation: heroBgZoom 22s ease-in-out infinite alternate;
+}
+
+@keyframes heroBgZoom {
+    from { transform: scale(1); }
+    to   { transform: scale(1.07); }
+}
+
+.world-hero > * {
+    position: relative;
+    z-index: 1;
+}
+
+/* =====================
+   WORLD HERO — CSS Animations (no JS)
+   ===================== */
+@keyframes worldFadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes worldExpandLine {
+    from { transform: scaleX(0); opacity: 0; }
+    to   { transform: scaleX(1); opacity: 1; }
+}
+
+.world-label {
+    font-family: 'CMU', serif;
+    font-size: 0.85rem;
+    letter-spacing: 6px;
+    color: rgba(255, 255, 255, 0.45);
+    margin-bottom: 28px;
+    text-transform: uppercase;
+    opacity: 0;
+    animation: worldFadeUp 0.9s ease-out 0.3s forwards;
+}
+
+.world-title {
+    font-family: 'New Tegomin', serif;
+    font-size: 4rem;
+    font-weight: 400;
+    letter-spacing: 4px;
+    text-align: center;
+    margin-bottom: 14px;
+    opacity: 0;
+    animation: worldFadeUp 1s ease-out 0.6s forwards;
+}
+
+.world-subtitle {
+    font-family: 'Bodoni Moda', serif;
+    font-size: 1.3rem;
+    font-weight: 400;
+    letter-spacing: 4px;
+    color: rgba(255, 255, 255, 0.65);
+    margin-bottom: 50px;
+    opacity: 0;
+    animation: worldFadeUp 0.9s ease-out 0.9s forwards;
+}
+
+.world-divider {
+    width: 55%;
+    max-width: 600px;
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(192, 57, 43, 0.7), transparent);
+    transform-origin: center;
+    opacity: 0;
+    animation: worldExpandLine 0.9s ease-out 1.2s forwards;
+}
+
+/* =====================
+   DREAM SECTION
+   ===================== */
+.dream-section {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    padding: 110px 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #060104;
+    overflow: hidden;
+}
+
+.dream-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 45%, rgba(99, 3, 27, 0.4) 0%, transparent 65%);
+    pointer-events: none;
+    animation: dreamPulse 7s ease-in-out infinite alternate;
+}
+
+@keyframes dreamPulse {
+    from { opacity: 0.5; transform: scale(0.98); }
+    to   { opacity: 1;   transform: scale(1.04); }
+}
+
+/* Dream Container */
+.dream-container {
+    position: relative;
+    z-index: 1;
+    max-width: 780px;
+    width: 90%;
+    text-align: center;
+}
+
+/* Decorative Lines */
+.dream-deco-line {
+    width: 55%;
+    margin: 0 auto 48px;
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(192, 57, 43, 0.65), transparent);
+    transform: scaleX(0);
+    transform-origin: center;
+    opacity: 0;
+    transition: opacity 0.8s ease, transform 0.9s ease;
+}
+
+.dream-deco-line:nth-of-type(2) {
+    margin-top: 48px;
+    margin-bottom: 48px;
+}
+
+.dream-deco-line.visible {
+    opacity: 1;
+    transform: scaleX(1);
+}
+
+/* Dream Text Base */
+.dream-p {
+    font-family: 'KoHo', sans-serif;
+    color: rgba(255, 255, 255, 0.80);
+    line-height: 2.1;
+    margin-bottom: 30px;
+}
+
+.dream-lead {
+    font-family: 'Bodoni Moda', serif;
+    font-size: 1.7rem;
+    letter-spacing: 2px;
+    color: #fff;
+    margin-bottom: 38px;
+}
+
+.dream-body {
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.75);
+}
+
+.dream-question {
+    font-size: 1.4rem;
+    color: rgba(255, 255, 255, 0.92);
+    line-height: 2.5;
+    letter-spacing: 0.5px;
+    margin-bottom: 0;
+}
+
+/* =====================
+   GLITCH EFFECT
+   ===================== */
+.glitch {
+    position: relative;
+    display: inline-block;
+    color: #fff;
+}
+
+.glitch::before,
+.glitch::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.glitch::before {
+    color: #ff2244;
+    text-shadow: -2px 0 #ff2244;
+    clip-path: polygon(0 20%, 100% 20%, 100% 40%, 0 40%);
+    animation: glitch-top 4s infinite linear;
+    opacity: 0.85;
+}
+
+.glitch::after {
+    color: #00e5ff;
+    text-shadow: 2px 0 #00e5ff;
+    clip-path: polygon(0 60%, 100% 60%, 100% 80%, 0 80%);
+    animation: glitch-bottom 4s infinite linear;
+    opacity: 0.85;
+}
+
+@keyframes glitch-top {
+    0%,  45%  { transform: translate(0); opacity: 0; }
+    46%        { transform: translate(-3px,  1px); opacity: 0.9; clip-path: polygon(0 15%, 100% 15%, 100% 38%, 0 38%); }
+    48%        { transform: translate( 3px, -1px); opacity: 0.9; clip-path: polygon(0 10%, 100% 10%, 100% 45%, 0 45%); }
+    50%        { transform: translate(-2px,  0);   opacity: 0.9; clip-path: polygon(0 22%, 100% 22%, 100% 36%, 0 36%); }
+    52%        { transform: translate( 1px,  1px); opacity: 0;   clip-path: polygon(0 20%, 100% 20%, 100% 40%, 0 40%); }
+    53%,  70%  { transform: translate(0); opacity: 0; }
+    71%        { transform: translate( 4px, -2px); opacity: 0.8; clip-path: polygon(0 5%,  100% 5%,  100% 30%, 0 30%); }
+    73%        { transform: translate(-4px,  2px); opacity: 0.8; clip-path: polygon(0 18%, 100% 18%, 100% 42%, 0 42%); }
+    75%        { transform: translate(0); opacity: 0; }
+    100%       { transform: translate(0); opacity: 0; }
+}
+
+@keyframes glitch-bottom {
+    0%,  55%  { transform: translate(0); opacity: 0; }
+    56%        { transform: translate( 3px, -1px); opacity: 0.9; clip-path: polygon(0 62%, 100% 62%, 100% 82%, 0 82%); }
+    58%        { transform: translate(-3px,  1px); opacity: 0.9; clip-path: polygon(0 55%, 100% 55%, 100% 75%, 0 75%); }
+    60%        { transform: translate( 2px,  0);   opacity: 0.9; clip-path: polygon(0 65%, 100% 65%, 100% 78%, 0 78%); }
+    62%        { transform: translate(0); opacity: 0; }
+    63%,  85%  { transform: translate(0); opacity: 0; }
+    86%        { transform: translate(-4px,  2px); opacity: 0.8; clip-path: polygon(0 58%, 100% 58%, 100% 80%, 0 80%); }
+    88%        { transform: translate( 4px, -2px); opacity: 0.8; clip-path: polygon(0 64%, 100% 64%, 100% 76%, 0 76%); }
+    90%        { transform: translate(0); opacity: 0; }
+    100%       { transform: translate(0); opacity: 0; }
+}
+
+/* =====================
+   SCROLL REVEAL
+   ===================== */
+.ws-reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.9s ease, transform 0.9s ease;
+}
+
+.ws-reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Override reveal for decorative lines */
+.dream-deco-line.ws-reveal {
+    transform: scaleX(0);
+}
+
+.dream-deco-line.ws-reveal.visible {
+    transform: scaleX(1);
+}
+
+/* World divider reveal — removed (divider now uses CSS animation) */
+/* =====================
+   LORE SECTION
+   ===================== */
+.lore-section {
+    position: relative;
+    width: 100%;
+    padding: 90px 40px 120px;
+    background: #0a0a0c;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-top: 1px solid rgba(192, 57, 43, 0.18);
+}
+
+/* Section Header */
+.lore-header {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    width: 90%;
+    max-width: 780px;
+    margin-bottom: 8px;
+}
+
+.lore-header-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(192, 57, 43, 0.55));
+}
+
+.lore-header-line:last-child {
+    background: linear-gradient(to left, transparent, rgba(192, 57, 43, 0.55));
+}
+
+.lore-header-label {
+    font-family: 'CMU', serif;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 7px;
+    color: rgba(192, 57, 43, 0.85);
+    text-transform: uppercase;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.lore-header-sub {
+    font-family: 'KoHo', sans-serif;
+    font-size: 0.85rem;
+    letter-spacing: 3px;
+    color: rgba(255, 255, 255, 0.3);
+    margin-bottom: 60px;
+    text-align: center;
+}
+
+.lore-container {
+    position: relative;
+    z-index: 1;
+    max-width: 780px;
+    width: 90%;
+}
+
+/* Era marker */
+.lore-era {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin: 64px 0 32px;
+}
+
+.lore-era:first-of-type {
+    margin-top: 0;
+}
+
+.lore-era::before,
+.lore-era::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, rgba(192, 57, 43, 0.35), transparent);
+}
+
+.lore-era::after {
+    background: linear-gradient(to left, rgba(192, 57, 43, 0.35), transparent);
+}
+
+.lore-year {
+    font-family: 'Bodoni Moda', serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    letter-spacing: 5px;
+    color: rgba(192, 57, 43, 0.85);
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.lore-year-now {
+    color: #fff;
+    text-shadow: 0 0 30px rgba(192, 57, 43, 0.7);
+    font-size: 1.7rem;
+}
+
+/* Lore paragraphs */
+.lore-p {
+    font-family: 'KoHo', sans-serif;
+    font-size: 1.06rem;
+    line-height: 2.15;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 22px;
+    text-align: left;
+    padding-left: 18px;
+    border-left: 2px solid rgba(192, 57, 43, 0.15);
+}
+
+.lore-em {
+    color: rgba(255, 255, 255, 0.95);
+    font-weight: 600;
+}
+
+.lore-org {
+    font-family: 'Bodoni Moda', serif;
+    font-style: italic;
+    color: rgba(192, 57, 43, 0.9);
+    font-weight: 700;
+}
+
+.lore-quiet {
+    text-align: center;
+    color: rgba(255, 255, 255, 0.38);
+    font-style: italic;
+    font-size: 0.95rem;
+    letter-spacing: 0.5px;
+    border-left: none;
+    padding-left: 0;
+}
+
+.lore-closing {
+    text-align: center;
+    font-size: 1.22rem;
+    line-height: 2.5;
+    color: rgba(255, 255, 255, 0.88);
+    margin-top: 10px;
+    margin-bottom: 0;
+    border-left: none;
+    padding-left: 0;
+}
+
+/* Anomaly tag list */
+.lore-anomaly-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 10px 14px;
+    margin: 10px 0 30px;
+    padding: 22px 30px;
+    border: 1px solid rgba(192, 57, 43, 0.25);
+    background: rgba(99, 3, 27, 0.1);
+}
+
+.lore-anomaly-list span {
+    font-family: 'KoHo', sans-serif;
+    font-size: 0.95rem;
+    color: rgba(255, 255, 255, 0.65);
+    letter-spacing: 0.5px;
+}
+
+.lore-anomaly-list .dot {
+    color: rgba(192, 57, 43, 0.6);
+    font-size: 1.1rem;
+}
+
+/* Lore divider */
+.lore-divider {
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(255,255,255,0.08), transparent);
+    margin: 50px 0;
+    transform-origin: center;
+    transition: opacity 0.8s ease, transform 0.9s ease;
+}
+
+.lore-divider.ws-reveal {
+    transform: scaleX(0);
+    opacity: 0;
+}
+
+.lore-divider.ws-reveal.visible {
+    transform: scaleX(1);
+    opacity: 1;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .lore-section {
+        padding: 70px 25px 80px;
+    }
+
+    .lore-p {
+        font-size: 1rem;
+        padding-left: 14px;
+    }
+
+    .lore-year {
+        font-size: 1.2rem;
+    }
+
+    .lore-year-now {
+        font-size: 1.5rem;
+    }
+
+    .lore-anomaly-list {
+        padding: 16px 18px;
+    }
+
+    .lore-header {
+        width: 100%;
+    }
+}
+@media (max-width: 768px) {
+    .navbar {
+        padding: 15px 20px;
+        gap: 20px;
+    }
+
+    .navbar a {
+        font-size: 0.8em;
+    }
+
+    .world-hero {
+        padding: 80px 25px 50px;
+        margin-top: 52px;
+    }
+
+    .world-title {
+        font-size: 2.5rem;
+    }
+
+    .world-subtitle {
+        font-size: 1rem;
+    }
+
+    .dream-lead {
+        font-size: 1.3rem;
+    }
+
+    .dream-body {
+        font-size: 1rem;
+    }
+
+    .dream-question {
+        font-size: 1.15rem;
+    }
+}
+
+@media (max-width: 400px) {
+    .navbar {
+        padding: 12px 15px;
+        gap: 12px;
+    }
+
+    .navbar a {
+        font-size: 0.7em;
+        letter-spacing: 0.5px;
+    }
+
+    .world-title {
+        font-size: 2rem;
+    }
+}
