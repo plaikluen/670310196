@@ -258,6 +258,30 @@
 </section>
 
 <script>
+    // Dropdown toggle for mobile (touch devices have no hover)
+    const dropdownToggle = document.querySelector('.nav-dropdown-toggle');
+    const navDropdown = document.querySelector('.nav-dropdown');
+
+    dropdownToggle.addEventListener('click', (e) => {
+        // Only intercept if it's a touch-style interaction (no fine pointer)
+        if (window.matchMedia('(hover: none)').matches) {
+            e.preventDefault();
+            navDropdown.classList.toggle('open');
+        }
+    });
+
+    // Close dropdown when tapping outside
+    document.addEventListener('click', (e) => {
+        if (!navDropdown.contains(e.target)) {
+            navDropdown.classList.remove('open');
+        }
+    });
+
+    // Close dropdown when a menu item is tapped
+    document.querySelectorAll('.nav-dropdown-menu li a').forEach(link => {
+        link.addEventListener('click', () => navDropdown.classList.remove('open'));
+    });
+
     // Scroll Reveal
     const revealObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {

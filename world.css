@@ -601,6 +601,415 @@ body {
         width: 100%;
     }
 }
+
+/* ==================== School Section ==================== */
+.section-school {
+    position: relative;
+    width: 100%;
+    padding: 110px 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    background: #040302;
+    overflow: hidden;
+}
+
+.section-school::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 40%, rgba(130, 85, 10, 0.38) 0%, transparent 65%);
+    pointer-events: none;
+    animation: schoolPulse 9s ease-in-out infinite alternate;
+}
+
+@keyframes schoolPulse {
+    from { opacity: 0.4; transform: scale(0.97); }
+    to   { opacity: 1;   transform: scale(1.04); }
+}
+
+.section-school .dream-deco-line {
+    background: linear-gradient(to right, transparent, rgba(201, 165, 90, 0.65), transparent);
+}
+
+.school-container {
+    position: relative;
+    z-index: 1;
+    max-width: 900px;
+    width: 90%;
+    text-align: center;
+}
+
+.school-title-block {
+    margin: 32px 0 8px;
+}
+
+.school-title-jp {
+    font-family: 'New Tegomin', serif;
+    font-size: 1.45rem;
+    letter-spacing: 8px;
+    color: rgba(201, 165, 90, 0.6);
+    margin-bottom: 12px;
+}
+
+.school-title-th {
+    font-family: 'CMU', serif;
+    font-size: 2.4rem;
+    font-weight: 400;
+    font-style: italic;
+    letter-spacing: 3px;
+    color: #fff;
+    margin: 0 0 10px;
+}
+
+.school-est-badge {
+    font-family: 'CMU', serif;
+    font-size: 0.78rem;
+    font-style: italic;
+    letter-spacing: 5px;
+    color: rgba(201, 165, 90, 0.45);
+    margin: 0 0 8px;
+}
+
+.school-lore-box {
+    background: rgba(255, 255, 255, 0.022);
+    border: 1px solid rgba(201, 165, 90, 0.1);
+    border-left: 3px solid rgba(201, 165, 90, 0.4);
+    border-radius: 4px;
+    padding: 28px 32px;
+    margin-bottom: 16px;
+    text-align: left;
+}
+
+.school-lore-p {
+    font-family: 'KoHo', sans-serif;
+    font-size: 1.02rem;
+    color: rgba(255, 255, 255, 0.78);
+    line-height: 2.15;
+    margin-bottom: 18px;
+}
+
+.school-lore-p:last-child {
+    margin-bottom: 0;
+}
+
+.school-accent {
+    color: #c9a55a;
+    font-weight: 700;
+}
+
+.school-curriculum-note {
+    font-family: 'KoHo', sans-serif;
+    font-size: 0.95rem;
+    color: rgba(255, 255, 255, 0.48);
+    margin: 8px 0 16px;
+    font-style: italic;
+    letter-spacing: 0.3px;
+}
+
+.school-curriculum-split {
+    display: grid;
+    grid-template-columns: 1fr 60px 1fr;
+    align-items: stretch;
+    margin-bottom: 28px;
+}
+
+.school-curriculum-card {
+    padding: 30px 22px;
+    border: 1px solid rgba(201, 165, 90, 0.15);
+    text-align: center;
+    background: rgba(255, 255, 255, 0.02);
+    transition: background 0.3s ease;
+}
+
+.school-curriculum-card:hover {
+    background: rgba(201, 165, 90, 0.05);
+}
+
+.school-curriculum-female {
+    border-right: none;
+    border-radius: 4px 0 0 4px;
+}
+
+.school-curriculum-male {
+    border-left: none;
+    border-radius: 0 4px 4px 0;
+}
+
+.curriculum-gender {
+    font-family: 'CMU', serif;
+    font-size: 0.72rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: rgba(201, 165, 90, 0.55);
+    display: block;
+    margin-bottom: 12px;
+}
+
+.curriculum-role-name {
+    font-family: 'New Tegomin', serif;
+    font-size: 2.2rem;
+    color: rgba(255, 255, 255, 0.88);
+    letter-spacing: 4px;
+    margin-bottom: 4px;
+}
+
+.curriculum-role-th {
+    font-family: 'CMU', serif;
+    font-size: 1.1rem;
+    font-style: italic;
+    color: rgba(201, 165, 90, 0.7);
+    letter-spacing: 2px;
+    margin-bottom: 14px;
+}
+
+.curriculum-desc {
+    font-family: 'KoHo', sans-serif;
+    font-size: 0.88rem;
+    color: rgba(255, 255, 255, 0.4);
+    line-height: 1.7;
+}
+
+.school-curriculum-divider {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.school-curriculum-divider::before {
+    content: '';
+    position: absolute;
+    top: 18%;
+    bottom: 18%;
+    left: 50%;
+    width: 1px;
+    background: rgba(201, 165, 90, 0.2);
+    transform: translateX(-50%);
+}
+
+.school-curriculum-divider span {
+    font-family: 'CMU', serif;
+    font-size: 0.68rem;
+    letter-spacing: 3px;
+    color: rgba(201, 165, 90, 0.38);
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    white-space: nowrap;
+    position: relative;
+    z-index: 1;
+    background: #040302;
+    padding: 8px 0;
+}
+
+.school-sub-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin: 48px 0 16px;
+    width: 100%;
+}
+
+.school-sub-header::before,
+.school-sub-header::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: rgba(201, 165, 90, 0.18);
+}
+
+.school-sub-badge {
+    font-family: 'CMU', serif;
+    font-size: 0.98rem;
+    font-style: italic;
+    letter-spacing: 2px;
+    color: #c9a55a;
+    white-space: nowrap;
+    padding: 6px 20px;
+    border: 1px solid rgba(201, 165, 90, 0.22);
+    border-radius: 4px;
+    background: rgba(201, 165, 90, 0.055);
+}
+
+.school-placeholder {
+    width: 100%;
+    border: 1px dashed rgba(201, 165, 90, 0.18);
+    border-radius: 4px;
+    padding: 30px 20px;
+    text-align: center;
+    margin-bottom: 8px;
+    background: rgba(201, 165, 90, 0.015);
+}
+
+.school-placeholder-img {
+    min-height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.placeholder-text {
+    font-family: 'CMU', serif;
+    font-size: 0.82rem;
+    font-style: italic;
+    letter-spacing: 4px;
+    color: rgba(201, 165, 90, 0.28);
+}
+
+.school-uniform-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 8px;
+    width: 100%;
+}
+
+.school-uniform-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    padding: 24px 16px;
+    border: 1px solid rgba(201, 165, 90, 0.15);
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.02);
+    transition: background 0.3s ease;
+}
+
+.school-uniform-card:hover {
+    background: rgba(201, 165, 90, 0.04);
+}
+
+.school-uniform-img {
+    width: 100%;
+    max-width: 340px;
+    height: auto;
+    display: block;
+    border-radius: 2px;
+}
+
+.school-uniform-label {
+    font-family: 'CMU', serif;
+    font-size: 0.78rem;
+    letter-spacing: 4px;
+    color: rgba(201, 165, 90, 0.5);
+    text-transform: uppercase;
+}
+
+.school-uniform-card {
+    cursor: zoom-in;
+}
+
+.uniform-zoom-hint {
+    display: block;
+    font-size: 0.62rem;
+    letter-spacing: 1.5px;
+    color: rgba(201, 165, 90, 0.28);
+    font-style: italic;
+    margin-top: 4px;
+    text-transform: none;
+}
+
+/* Lightbox */
+#lightbox {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.88);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    cursor: zoom-out;
+}
+
+#lightbox.active {
+    display: flex;
+}
+
+#lightbox-img {
+    max-width: 90vw;
+    max-height: 70vh;
+    object-fit: contain;
+    border-radius: 4px;
+    cursor: default;
+}
+
+.lightbox-close {
+    position: fixed;
+    top: 20px;
+    right: 28px;
+    background: none;
+    border: 1px solid rgba(255,255,255,0.3);
+    color: rgba(255,255,255,0.7);
+    font-size: 1.2rem;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease, color 0.2s ease;
+    z-index: 1001;
+}
+
+.lightbox-close:hover {
+    background: rgba(255,255,255,0.15);
+    color: #fff;
+}
+
+@media (max-width: 600px) {
+    .school-uniform-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 768px) {
+    .section-school { padding: 80px 20px; }
+    .school-title-th { font-size: 1.6rem; letter-spacing: 1px; }
+    .school-title-jp { font-size: 1.1rem; letter-spacing: 4px; }
+    .school-lore-box { padding: 20px 16px; }
+    .school-lore-p { font-size: 0.95rem; }
+
+    .school-curriculum-split { grid-template-columns: 1fr; }
+
+    .school-curriculum-female {
+        border-right: 1px solid rgba(201, 165, 90, 0.15);
+        border-bottom: none;
+        border-radius: 4px 4px 0 0;
+    }
+
+    .school-curriculum-male {
+        border-left: 1px solid rgba(201, 165, 90, 0.15);
+        border-top: none;
+        border-radius: 0 0 4px 4px;
+    }
+
+    .school-curriculum-divider {
+        flex-direction: row;
+        justify-content: center;
+        padding: 12px 0;
+        border-left: 1px solid rgba(201, 165, 90, 0.15);
+        border-right: 1px solid rgba(201, 165, 90, 0.15);
+    }
+
+    .school-curriculum-divider::before { display: none; }
+
+    .school-curriculum-divider span {
+        writing-mode: horizontal-tb;
+        padding: 0;
+        background: transparent;
+    }
+
+    .school-sub-badge { font-size: 0.85rem; padding: 5px 14px; letter-spacing: 1px; }
+}
+
+@media (max-width: 400px) {
+    .school-title-th { font-size: 1.3rem; }
+    .school-curriculum-card { padding: 20px 14px; }
+    .curriculum-role-name { font-size: 1.8rem; }
+}
 @media (max-width: 768px) {
     .navbar {
         padding: 15px 20px;

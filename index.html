@@ -981,7 +981,7 @@
 
     const BX = 75, BW = 50;
     const BH_NORMAL = 40, BH_DUCK = 18;
-    const GRAVITY = 0.45, JUMP_V = -13.5;
+    const GRAVITY = 0.35, JUMP_V = -10;
     let by, bvy, bGround, bDuck;
     function resetBird() { by = groundY - BH_NORMAL; bvy = 0; bGround = true; bDuck = false; }
     resetBird();
@@ -990,9 +990,9 @@
     let state = 'idle';
     let score = 0;
     let best  = parseInt(localStorage.getItem('kmn_bird_best') || '0');
-    let speed = 1.0;
+    let speed = 1.6;
     let frame = 0;
-    let nextAt = 120;
+    let nextAt = 200;
     let obs = [];
     bestEl.textContent = best;
 
@@ -1000,11 +1000,11 @@
         const r = Math.random();
         if (r < 0.48) {
             // Rock — กระโดดหลบ
-            const h = 30 + Math.floor(Math.random() * 38);
+            const h = 18 + Math.floor(Math.random() * 20);
             obs.push({ t: 'r', x: W + 10, y: groundY - h, w: 26, h });
         } else if (r < 0.78) {
             // Log — กระโดดหลบ
-            obs.push({ t: 'l', x: W + 10, y: groundY - 22, w: 58, h: 22 });
+            obs.push({ t: 'l', x: W + 10, y: groundY - 20, w: 34, h: 20 });
         } else {
             // Hanging branch — ก้มหลบ (เปิดเมื่อ speed > 5.8)
             if (speed < 6.5) {
@@ -1031,7 +1031,7 @@
     }
 
     function restart() {
-        score = 0; speed = 1.0; frame = 0; nextAt = 120; obs = [];
+        score = 0; speed = 1.6; frame = 0; nextAt = 200; obs = [];
         resetBird();
         scoreEl.textContent = '0';
         hintEl.style.opacity = '0';
@@ -1041,7 +1041,7 @@
     function hit(o) {
         const bh = curBH();
         const adjBy = bGround ? groundY - bh : by;
-        const m = 6;
+        const m = 12;
         return BX + m < o.x + o.w - m &&
                BX + BW - m > o.x + m &&
                adjBy + m < o.y + o.h &&
@@ -1163,8 +1163,8 @@
 
         if (state === 'running') {
             frame++;
-            // เพิ่มความเร็วแบบ smooth: 500 frame แรกคงที่, หลังจากนั้นค่อย ๆ เพิ่มต่อเนื่อง
-            speed = Math.min(1.0 + Math.max(0, frame - 500) / 4000, 10);
+            // เพิ่มความเร็วแบบ smooth: เริ่มที่ 1.6 และค่อย ๆ เพิ่มจนถึง 4.5
+            speed = Math.min(1.6 + frame / 4000, 4.5);
 
             if (frame % 5 === 0) {
                 score++;
@@ -1190,8 +1190,8 @@
 
             if (frame >= nextAt) {
                 spawn();
-                const minGap = Math.max(48, Math.floor(100 - speed * 4));
-                nextAt = frame + minGap + Math.floor(Math.random() * 50);
+                const minGap = Math.max(80, Math.floor(260 / speed));
+                nextAt = frame + minGap + Math.floor(Math.random() * Math.max(40, Math.floor(120 / speed)));
             }
 
             let dead = false;
