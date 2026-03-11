@@ -614,7 +614,7 @@
         <div class="search-bar">
             <div class="search-input-wrap">
                 <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                <input class="search-input" id="searchInput" type="text" placeholder="ค้นหาชื่อหรือรหัส AMN-xxx...">
+                <input class="search-input" id="searchInput" type="text" placeholder="ค้นหาชื่อหรือรหัส ANM-xxx...">
             </div>
             <select class="filter-select" id="filterLevel">
                 <option value="">Level: All</option>
@@ -651,24 +651,24 @@
 
     <script>
         const monsters = [
-            { name: "AMN-001", displayName: "AMN-001", level: "ืnone",  type: "none",     description: "??????", image: "image/backcard.png" },
-            { name: "AMN-002", displayName: "AMN-002", level: "friendly",  type: "entity",     description: "??????", image: "image/02_card.png", modalImage: "image/02.png" },
-            { name: "AMN-003", displayName: "AMN-003", level: "friendly",  type: "entity", description: "??????", image: "image/03_card.png", modalImage: "image/03.png" },
-            { name: "AMN-004", displayName: "AMN-004", level: "neutral", type: "entity",     description: "??????", image: "image/04_card.png", modalImage: "image/04.png" },
-            { name: "AMN-005", displayName: "AMN-005", level: "neutral",  type: "phenomenon", description: "??????", image: "image/backcard.png" },
-            { name: "AMN-006", displayName: "AMN-006", level: "hostile",  type: "entity",     description: "??????", image: "image/backcard.png" },
-            { name: "AMN-007", displayName: "AMN-007", level: "hostile",  type: "entity",     description: "??????", image: "image/backcard.png" },
-            { name: "AMN-009", displayName: "AMN-009", level: "friendly", type: "entity",     description: "??????", image: "image/backcard.png" },
-            { name: "AMN-010", displayName: "AMN-010", level: "neutral",  type: "entity",     description: "??????", image: "image/backcard.png" },
-            { name: "AMN-011", displayName: "AMN-011", level: "hostile",  type: "phenomenon", description: "??????", image: "image/backcard.png" },
-            { name: "AMN-012", displayName: "AMN-012", level: "neutral",  type: "entity",     description: "??????", image: "image/backcard.png" },
-            { name: "AMN-013", displayName: "AMN-013", level: "hostile",  type: "phenomenon", description: "??????", image: "image/backcard.png" },
-            { name: "AMN-014", displayName: "AMN-014", level: "friendly", type: "entity",     description: "??????", image: "image/backcard.png" },
-            { name: "AMN-015", displayName: "AMN-015", level: "neutral",  type: "entity",     description: "??????", image: "image/backcard.png" },
-            { name: "AMN-016", displayName: "AMN-016", level: "hostile",  type: "phenomenon", description: "??????", image: "image/backcard.png" },
-            { name: "AMN-017", displayName: "AMN-017", level: "neutral",  type: "entity",     description: "??????", image: "image/backcard.png" },
-            { name: "AMN-018", displayName: "AMN-018", level: "friendly", type: "phenomenon", description: "??????", image: "image/backcard.png" },
-            { name: "AMN-019", displayName: "AMN-019", level: "hostile",  type: "entity",     description: "??????", image: "image/backcard.png" }
+            { name: "ANM-001", displayName: "ANM-001", level: "ืnone",  type: "none",     description: "??????", image: "image/backcard.png" },
+            { name: "ANM-002", displayName: "ANM-002", level: "friendly",  type: "entity",     description: "??????", image: "image/02_card.png", modalImage: "image/02.png" },
+            { name: "ANM-003", displayName: "ANM-003", level: "friendly",  type: "entity", description: "??????", image: "image/03_card.png", modalImage: "image/03.png" },
+            { name: "ANM-004", displayName: "ANM-004", level: "neutral", type: "entity",     description: "??????", image: "image/04_card.png", modalImage: "image/04.png" },
+            { name: "ANM-005", displayName: "ANM-005", level: "neutral",  type: "phenomenon", description: "??????", image: "image/backcard.png" },
+            { name: "ANM-006", displayName: "ANM-006", level: "hostile",  type: "entity",     description: "??????", image: "image/backcard.png" },
+            { name: "ANM-007", displayName: "ANM-007", level: "hostile",  type: "entity",     description: "??????", image: "image/backcard.png" },
+            { name: "ANM-009", displayName: "ANM-009", level: "friendly", type: "entity",     description: "??????", image: "image/backcard.png" },
+            { name: "ANM-010", displayName: "ANM-010", level: "neutral",  type: "entity",     description: "??????", image: "image/backcard.png" },
+            { name: "ANM-011", displayName: "ANM-011", level: "hostile",  type: "phenomenon", description: "??????", image: "image/backcard.png" },
+            { name: "ANM-012", displayName: "ANM-012", level: "neutral",  type: "entity",     description: "??????", image: "image/backcard.png" },
+            { name: "ANM-013", displayName: "ANM-013", level: "hostile",  type: "phenomenon", description: "??????", image: "image/backcard.png" },
+            { name: "ANM-014", displayName: "ANM-014", level: "friendly", type: "entity",     description: "??????", image: "image/backcard.png" },
+            { name: "ANM-015", displayName: "ANM-015", level: "neutral",  type: "entity",     description: "??????", image: "image/backcard.png" },
+            { name: "ANM-016", displayName: "ANM-016", level: "hostile",  type: "phenomenon", description: "??????", image: "image/backcard.png" },
+            { name: "ANM-017", displayName: "ANM-017", level: "neutral",  type: "entity",     description: "??????", image: "image/backcard.png" },
+            { name: "ANM-018", displayName: "ANM-018", level: "friendly", type: "phenomenon", description: "??????", image: "image/backcard.png" },
+            { name: "ANM-019", displayName: "ANM-019", level: "hostile",  type: "entity",     description: "??????", image: "image/backcard.png" }
         ];
 
         let currentFlippedCardId = null;
