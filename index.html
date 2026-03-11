@@ -990,7 +990,7 @@
     let state = 'idle';
     let score = 0;
     let best  = parseInt(localStorage.getItem('kmn_bird_best') || '0');
-    let speed = 3.0;
+    let speed = 1.0;
     let frame = 0;
     let nextAt = 120;
     let obs = [];
@@ -1031,7 +1031,7 @@
     }
 
     function restart() {
-        score = 0; speed = 3.0; frame = 0; nextAt = 120; obs = [];
+        score = 0; speed = 1.0; frame = 0; nextAt = 120; obs = [];
         resetBird();
         scoreEl.textContent = '0';
         hintEl.style.opacity = '0';
@@ -1163,9 +1163,8 @@
 
         if (state === 'running') {
             frame++;
-            // เพิ่มความเร็วแบบขั้น: 500 frame แรกคงที่, หลังจากนั้นทุก ๆ 1000 frame เพิ่ม 0.4
-            const step = frame < 500 ? 0 : 1 + Math.floor((frame - 500) / 1000);
-            speed = Math.min(3.0 + step * 0.4, 10);
+            // เพิ่มความเร็วแบบ smooth: 500 frame แรกคงที่, หลังจากนั้นค่อย ๆ เพิ่มต่อเนื่อง
+            speed = Math.min(1.0 + Math.max(0, frame - 500) / 4000, 10);
 
             if (frame % 5 === 0) {
                 score++;
